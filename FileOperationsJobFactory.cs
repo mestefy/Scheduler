@@ -18,6 +18,7 @@ namespace Scheduler
         private class FileJob : IJob
         {
             private Random random = new Random();
+
             //public async Task RunAsync(IJobItem jobItem, CancellationToken token)
             //{
             //    var fileJobItem = jobItem as FileJobItem;
@@ -33,7 +34,7 @@ namespace Scheduler
             //    }
             //}
 
-            // The stupid version when we create a thread instead of just using the file task
+            // The stupid version when we create a thread instead of just using the file stream write task
             public Task RunAsync(IJobItem jobItem, CancellationToken token)
             {
                 return Task.Run(async () =>
@@ -50,11 +51,6 @@ namespace Scheduler
 
                         for (var index = 0; index < noOfLines; index++)
                         {
-                            if (index % 17 == 0)
-                            {
-                                // adding some randomness
-                                // await Task.Delay(10);
-                            }
                             await fileStream.WriteAsync(buffer, 0, buffer.Length, token);
                         }
                         Console.WriteLine($"Completed writing in file [{fileJobItem.FilePath}]");
